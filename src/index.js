@@ -59,9 +59,38 @@ const Board = () => {
       return false;
   }
 
-  
-  const status = 'Next player: ' + next;
+  //무승부 판정 기능
+  const isDraw = () => {
+    for(let i = 0; i < squares.length; ++i) {
+      if(squares[i] == '') return false;
+    }
+    if(hasWinner()){
+      return false;
+    }
+    return true;
+  }
+//재시작 버튼
+  const restartButton = () => {
+    if(isDraw() || hasWinner()){
+      return (
+        <button onClick={() => {
+          setSquares(Array(9).fill(''));
+          setNext('X');
+        }}>
+          Restart
+        </button>
+      );
+    }
+    return null;
+  }
 
+  
+  let status = 'Next player: ' + next;
+  if(hasWinner()) {
+    status = 'Winner: ' + hasWinner();
+  }else if(isDraw()){
+    status = 'Draw!';
+  }
   
 
   return (
@@ -82,6 +111,8 @@ const Board = () => {
         {renderSquare(7)}
         {renderSquare(8)}
       </div>
+      <div>{restartButton()}</div>
+
     </div>
   );
 }
